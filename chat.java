@@ -2,12 +2,11 @@ package com.example.appwebview;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -18,40 +17,31 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class account extends AppCompatActivity {
+public class chat extends AppCompatActivity {
 
     WebView webviewku;
     WebSettings websettingku;
-    long exitTime = 0;
-    SwipeRefreshLayout refreshLayout;
     BottomNavigationView bottomNavigationView;
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_account);
-        webviewku = (WebView) findViewById(R.id.acc_webView);
-        bottomNavigationView = findViewById(R.id.acc_nav_view);
-        bottomNavigationView.setSelectedItemId(R.id.account);
+        setContentView(R.layout.activity_chat);
+
+        webviewku = (WebView) findViewById(R.id.chat_webView);
+        bottomNavigationView = findViewById(R.id.chat_nav_view);
+        bottomNavigationView.setSelectedItemId(R.id.chat);
         websettingku = webviewku.getSettings();
         websettingku.setJavaScriptEnabled(true);
-        webviewku.clearHistory();
-        // Enable Cookies
-        CookieManager.getInstance().setAcceptCookie(true);
-        if (android.os.Build.VERSION.SDK_INT >= 21)
-            CookieManager.getInstance().setAcceptThirdPartyCookies(webviewku, true);
-        // WebView Tweaks
         webviewku.setWebChromeClient(new WebChromeClient());
-        webviewku.setWebViewClient(new WebViewClient());
         webviewku.getSettings().setDomStorageEnabled(true);
-        websettingku.setAppCacheEnabled(true);
-        webviewku.loadUrl("https://fila.co.id/account");
+        webviewku.loadUrl("https://api.whatsapp.com/send/?phone=628122026450");
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
 
@@ -82,31 +72,24 @@ public class account extends AppCompatActivity {
 
             }
         });
+            class myWebclient extends WebViewClient {
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    if (url.startsWith("whatsapp:")) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(url));
+                        startActivity(intent);
+                        return true;
+                    }
+                    return false;
+                }
+            }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(ContextCompat.getColor(account.this, R.color.colorAccent));
+            getWindow().setStatusBarColor(ContextCompat.getColor(chat.this, R.color.colorAccent));
 
         }
-        webviewku.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                refreshLayout.setRefreshing(true);
-            }
 
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                refreshLayout.setRefreshing(false);
-            }
-        });
-
-        refreshLayout = findViewById(R.id.swipeRefreshLayout);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                webviewku.loadUrl("https://fila.co.id/account");
-            }
-        });
 
     }
 
@@ -117,28 +100,8 @@ public class account extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
 
-
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

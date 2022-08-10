@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -23,7 +22,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class account extends AppCompatActivity {
+public class sale extends AppCompatActivity {
 
     WebView webviewku;
     WebSettings websettingku;
@@ -31,27 +30,20 @@ public class account extends AppCompatActivity {
     SwipeRefreshLayout refreshLayout;
     BottomNavigationView bottomNavigationView;
 
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_account);
-        webviewku = (WebView) findViewById(R.id.acc_webView);
-        bottomNavigationView = findViewById(R.id.acc_nav_view);
-        bottomNavigationView.setSelectedItemId(R.id.account);
+        setContentView(R.layout.activity_sale);
+        webviewku = (WebView) findViewById(R.id.sale_webView);
+        bottomNavigationView = findViewById(R.id.sale_nav_view);
+        bottomNavigationView.setSelectedItemId(R.id.sale);
         websettingku = webviewku.getSettings();
         websettingku.setJavaScriptEnabled(true);
-        webviewku.clearHistory();
-        // Enable Cookies
-        CookieManager.getInstance().setAcceptCookie(true);
-        if (android.os.Build.VERSION.SDK_INT >= 21)
-            CookieManager.getInstance().setAcceptThirdPartyCookies(webviewku, true);
-        // WebView Tweaks
         webviewku.setWebChromeClient(new WebChromeClient());
         webviewku.setWebViewClient(new WebViewClient());
-        webviewku.getSettings().setDomStorageEnabled(true);
-        websettingku.setAppCacheEnabled(true);
-        webviewku.loadUrl("https://fila.co.id/account");
+        webviewku.loadUrl("https://fila.co.id/search?q=sale");
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
 
@@ -83,10 +75,13 @@ public class account extends AppCompatActivity {
             }
         });
 
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(ContextCompat.getColor(account.this, R.color.colorAccent));
+            getWindow().setStatusBarColor(ContextCompat.getColor(sale.this, R.color.colorAccent));
 
         }
+
         webviewku.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -99,12 +94,11 @@ public class account extends AppCompatActivity {
                 refreshLayout.setRefreshing(false);
             }
         });
-
         refreshLayout = findViewById(R.id.swipeRefreshLayout);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                webviewku.loadUrl("https://fila.co.id/account");
+                webviewku.loadUrl("https://fila.co.id/search?q=sale");
             }
         });
 
@@ -116,65 +110,7 @@ public class account extends AppCompatActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
-
-
     }
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
